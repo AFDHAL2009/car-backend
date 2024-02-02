@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 app.use("/api/driver", driverRoutes);
 app.use("/api/mission", missionRoutes);
 app.get("/", (req, res) => {
-  res.send("carwash-backend");
+  res.send("carwash-backend1");
 });
 
 module.exports = app;
