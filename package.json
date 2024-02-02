@@ -1,0 +1,15 @@
+{
+  "name": "car-backend",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": [],
+  "description": ""
+}
