@@ -48,10 +48,20 @@ const sign_in = (req, res, next) => {
               .json({ message: "email or password is wrong!" });
           }
           res.status(200).json({
-            driverId: driver._id,
             token: jwt.sign({ driverId: driver._id }, "RANDOM_TOKEN_SECRET", {
               expiresIn: "24h",
             }),
+            driverId: driver._id,
+            firstName: driver.firstName,
+            lastName: driver.lastName,
+            birthDate: driver.birthDate,
+            email: driver.email,
+            phone: driver.phone,
+            city: driver.city,
+            vehicleType: driver.vehicleType,
+            vehicleModel: driver.vehicleModel,
+            manufactureYear: driver.manufactureYear,
+            registrationNumber: driver.registrationNumber,
           });
         })
         .catch((error) => res.status(500).json({ error }));
