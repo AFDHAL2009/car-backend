@@ -72,7 +72,38 @@ const sign_in = (req, res, next) => {
       return res.status(500).json({ message: "login failed" });
     });
 };
+const get_profile = (req, res, next) => {
+  let driverId = getDriverId(req.headers.authorization.split(" ")[1]);
+  console.log("dd" + driverId);
+  Driver.findOne({ _id: driverId })
+    .then((driver) => {
+      if (!driver) {
+        return res.status(401).json({ message: "server error" });
+      }
+      //
+      return res.status(200).json({
+        token: driver.token,
+        driverId: driver._id,
+        firstName: driver.firstName,
+        lastName: driver.lastName,
+        birthDate: driver.birthDate,
+        email: driver.email,
+        phone: driver.phone,
+        city: driver.city,
+        vehicleType: driver.vehicleType,
+        vehicleModel: driver.vehicleModel,
+        manufactureYear: driver.manufactureYear,
+        registrationNumber: driver.registrationNumber,
+      });
+
+      //
+    })
+    .catch(() => {
+      return res.status(500).json({ message: "get profile failed" });
+    });
+};
 module.exports = {
   sign_up,
   sign_in,
+  get_profile,
 };
