@@ -82,7 +82,7 @@ const get_profile = (req, res, next) => {
       }
       //
       return res.status(200).json({
-        token: driver.token,
+        token: req.headers.authorization.split(" ")[1],
         driverId: driver._id,
         firstName: driver.firstName,
         lastName: driver.lastName,
