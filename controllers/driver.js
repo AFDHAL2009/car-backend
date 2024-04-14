@@ -74,7 +74,7 @@ const sign_in = (req, res, next) => {
 };
 const get_profile = (req, res, next) => {
   let driverId = getDriverId(req.headers.authorization.split(" ")[1]);
-  console.log("dd" + driverId);
+  console.log("id=" + driverId);
   Driver.findOne({ _id: driverId })
     .then((driver) => {
       if (!driver) {
@@ -102,8 +102,158 @@ const get_profile = (req, res, next) => {
       return res.status(500).json({ message: "get profile failed" });
     });
 };
+const update_profile = async (req, res, next) => {
+  let driverId = getDriverId(req.headers.authorization.split(" ")[1]);
+  console.log("id=" + driverId);
+  /* const driver = new Driver({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    birthDate: req.body.birthDate,
+    email: req.body.email,
+    password: req.body.password,
+    phone: req.body.phone,
+    city: req.body.city,
+    vehicleType: req.body.vehicleType,
+    vehicleModel: req.body.vehicleModel,
+    manufactureYear: req.body.manufactureYear,
+    registrationNumber: req.body.registrationNumber,
+  });
+  if (
+    req.body.firstName === "" ||
+    req.body.lastName === "" ||
+    req.body.birthDate === "" ||
+    req.body.email === "" ||
+    req.body.password === "" ||
+    req.body.phone === "" ||
+    req.body.city === "" ||
+    req.body.vehicleType === "" ||
+    req.body.vehicleModel === "" ||
+    req.body.manufactureYear === "" ||
+    req.body.registrationNumber === ""
+  ) {
+    res.status(400).json({
+      message: "Profile update failed!",
+      error: "missed data",
+    });
+  } else {
+
+   
+    Driver.updateOne(
+      { _id: driverId },
+      {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthDate: req.body.birthDate,
+        email: req.body.email,
+        //password: req.body.password,
+        phone: req.body.phone,
+        city: req.body.city,
+        vehicleType: req.body.vehicleType,
+        vehicleModel: req.body.vehicleModel,
+        manufactureYear: req.body.manufactureYear,
+        registrationNumber: req.body.registrationNumber,
+      }
+    )
+      .then(() => {
+        res.status(201).json({
+          message: "Profile updated successfully!",
+        });
+      })
+      .catch((error) => {
+        res.status(400).json({
+          message: "Profile update failed!",
+          error: error,
+        });
+      });
+  }*/
+  const {
+    firstName,
+    lastName,
+    birthDate,
+    email,
+    password,
+    phone,
+    city,
+    vehicleType,
+    vehicleModel,
+    manufactureYear,
+    registrationNumber,
+  } = req.body;
+  try {
+    const user = await Driver.findByIdAndUpdate(
+      driverId,
+      {
+        firstName,
+        lastName,
+        birthDate,
+        email,
+        password,
+        phone,
+        city,
+        vehicleType,
+        vehicleModel,
+        manufactureYear,
+        registrationNumber,
+      },
+      { new: true }
+    );
+    console.log(Object.keys(req.body));
+
+    if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+      res.status(400).json({
+        message: "Profile update failed!",
+        error: "Missed data",
+      });
+    } else if (
+      req.body.constructor === Object &&
+      Object.keys(req.body).length > 0
+    ) {
+      const tab = [
+        "firstName",
+        "lastName",
+        "birthDate",
+        "email",
+        "password",
+        "phone",
+        "city",
+        "vehicleType",
+        "vehicleModel",
+        "manufactureYear",
+        "registrationNumber",
+      ];
+      let isfound = true;
+
+      for (let i = 0; i < Object.keys(req.body).length; i++) {
+        //console.log(tab.includes(Object.keys(req.body)[i]));
+        let result = tab.includes(Object.keys(req.body)[i]);
+        if (result === false) isfound = false;
+      }
+      if (isfound === false)
+        res.status(400).json({
+          message: "Profile update failed!",
+          error: "Missed data",
+        });
+      else
+        res.status(201).json({
+          message: "Profile updated successfully!",
+        });
+    } else {
+      res.status(201).json({
+        message: "Profile updated successfully!",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Profile update failed!",
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   sign_up,
   sign_in,
   get_profile,
+  update_profile,
 };
