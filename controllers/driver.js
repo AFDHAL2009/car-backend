@@ -222,11 +222,12 @@ const update_profile = async (req, res, next) => {
         "registrationNumber",
       ];
       let isfound = true;
-
       for (let i = 0; i < Object.keys(req.body).length; i++) {
         //console.log(tab.includes(Object.keys(req.body)[i]));
         let result = tab.includes(Object.keys(req.body)[i]);
-        if (result === false) isfound = false;
+
+        if (result === false || Object.values(req.body)[i] === "")
+          isfound = false;
       }
       if (isfound === false)
         res.status(400).json({
